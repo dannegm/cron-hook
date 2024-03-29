@@ -7,7 +7,8 @@
         "format": "prettier . --write --log-level=warn",
         "migrate": "fn() { npx prisma migrate $1; }; fn",
         "build": "npx babel src --out-dir ./build",
-        "start": "pm2 start ./build"
+        "start": "node ./build",
+        "prod": "pm2 start ./build"
     },
     "dependencies": {
         "@babel/cli": "^7.24.1",
