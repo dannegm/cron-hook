@@ -24,10 +24,10 @@ COPY . ${APP_DIR}
 # Move work directory to the server instance
 WORKDIR ${APP_DIR}
 
-RUN yarn dist
+RUN yarn build
 
 # Environment setup
 ENV PORT=80
 
 # Server command
-ENTRYPOINT ["pm2-runtime", "dist/index.js"]
+ENTRYPOINT ["pm2-runtime", "build/index.js"]
