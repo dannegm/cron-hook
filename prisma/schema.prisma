@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum HttpMethods {
+    GET
+    POST
+    UPDATE
+    DELETE
+    PATCH
+}
+
+model Cron {
+    id String @id @default(uuid())
+    pattern String
+    active Boolean @default(true)
+    hook String
+    method HttpMethods @default(GET)
+    authorization String?
+    headers Json?
+    params Json?
+    body String?
+    firstRun DateTime @default(now())
+    nextRun DateTime?
+    lastRun DateTime?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    logs Log[]
+}
+
+model Log {
+    id String @id @default(uuid())
+    cronId String
+    cron Cron @relation(fields: [cronId], references: [id])
+    executedAt DateTime @default(now())
+    status Int
+    response String
+    contentType String
+    headers Json
+}

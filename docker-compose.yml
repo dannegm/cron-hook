@@ -1,0 +1,42 @@
+version: '3.1'
+services:
+    api:
+        build:
+            dockerfile: ./Dockerfile
+        ports:
+            - ${API_PORT:-3000}:80
+            - ${APP_PORT:-3030}:3000
+        volumes:
+            - '.:${APP_DIR:-/app}'
+        networks:
+            - app
+    db:
+        image: postgres:16
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+        ports:
+            - '5432:5432'
+        volumes:
+            - 'postgres:/data'
+        networks:
+            - app
+    adminer:
+        image: adminer
+        restart: always
+        environment:
+            ADMINER_DEFAULT_SERVER: postgresql://postgres:postgres@db:5432/postgres
+        ports:
+            - 8080:8080
+        volumes:
+            - './plugins/adminer:/var/www/html/plugins-enabled'
+        networks:
+            - app
+networks:
+    app:
+        driver: bridge
+volumes:
+    postgres:
+        driver: local
