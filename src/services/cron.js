@@ -11,6 +11,7 @@ const getCronsAndExecute = async runDate => {
 };
 
 const runner = async () => {
+    console.log(`[TICK] ${Date.now()}`);
     const runDate = setMilliseconds(new Date(), 0);
     await getCronsAndExecute(runDate);
 };

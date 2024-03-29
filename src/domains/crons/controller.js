@@ -43,6 +43,16 @@ export const updateCronById = async (cronId, data) => {
     return found;
 };
 
+export const deleteCronById = async cronId => {
+    const found = await CronSchema.delete({
+        where: {
+            id: cronId,
+        },
+    });
+
+    return found;
+};
+
 export const getCronsByNextRun = async nextRun => {
     const found = await CronSchema.findMany({
         where: {
@@ -89,16 +99,23 @@ export const executeById = async cronId => {
         lastRun: new Date(startTime),
     });
 
+    const headers = found.headers || {};
+    const params = found.params || {};
+    const data = found.body ? JSON.parse(found.body) : undefined;
+
     try {
         const response = await axios({
+            data,
             method: found.method.toLowerCase(),
             url: buildUrl({
                 baseUrl: found.hook,
                 query: {
                     time: Date.now(),
+                    ...params,
                 },
             }),
             headers: {
+                ...headers,
                 'user-agent': `${process.env.npm_package_name}/${process.env.npm_package_version}`,
             },
         });
