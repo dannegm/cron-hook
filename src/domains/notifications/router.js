@@ -1,46 +1,32 @@
 import 'dotenv/config';
 
 import { Router } from 'express';
-import mailgun from 'mailgun-js';
+import { Resend } from 'resend';
 
 const router = Router();
 
-const mail = mailgun({
-    apiKey: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMAIN,
-});
-
-const asyncSend = data => {
-    return new Promise((resolve, reject) => {
-        mail.messages().send(data, (error, body) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(body);
-            }
-        });
-    });
-};
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const resend = new Resend(RESEND_API_KEY);
 
 router.post('/notification', async (req, res) => {
-    try {
-        const result = await asyncSend({
-            from: req.body.from,
-            to: req.body.to,
-            subject: req.body.subject,
-            text: req.body.content,
-        });
+    const { data, error } = await resend.emails.send({
+        from: req.body.from,
+        to: req.body.to,
+        subject: req.body.subject,
+        html: req.body.content,
+    });
 
-        return res.status(200).json({
-            success: true,
-            data: result,
-        });
-    } catch (err) {
-        return res.status(500).json({
+    if (error) {
+        return res.status(400).json({
             success: false,
-            error: err,
+            error,
         });
     }
+
+    return res.status(200).json({
+        success: true,
+        data,
+    });
 });
 
 export default router;
