@@ -9,6 +9,7 @@ import notificationsRouter from '@/domains/notifications/router.js';
 import testRouter from '@/domains/test/router.js';
 
 const PORT = process.env.PORT || 3000;
+const APP_SECRET = process.env.APP_SECRET || 3000;
 
 const app = express();
 
@@ -18,6 +19,18 @@ app
     .use(morgan(':method :url :status :response-time ms - ":user-agent"'))
     .use(bodyParser.json());
 
+const authMiddleware = (req, res, next) => {
+    const token = req.headers?.authorization;
+
+    if (!token || !token.includes(token)) {
+        return res.status(401).json({
+            error: 'Unauthorized',
+        });
+    }
+
+    return next();
+};
+
 const startApp = app => {
     console.log('Mounting server...');
 
@@ -25,10 +38,10 @@ const startApp = app => {
         res.send('OK');
     });
 
-    app.use('/api', cronsRouter);
-    app.use('/api', logsRouter);
-    app.use('/api', notificationsRouter);
-    app.use('/api', testRouter);
+    app.use('/api', authMiddleware, cronsRouter);
+    app.use('/api', authMiddleware, logsRouter);
+    app.use('/api', authMiddleware, notificationsRouter);
+    app.use('/api', authMiddleware, testRouter);
 
     app.listen(PORT, () => {
         console.log(`Server started at port ${PORT}`);
