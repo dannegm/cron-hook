@@ -25,7 +25,7 @@ enum HttpMethods {
 model Cron {
     id String @id @default(uuid())
     pattern String
-    patternDescription String? @default("no description")
+    patternDescription String
     active Boolean @default(true)
     hook String
     method HttpMethods @default(GET)
