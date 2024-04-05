@@ -29,7 +29,6 @@ model Cron {
     active Boolean @default(true)
     hook String
     method HttpMethods @default(GET)
-    authorization String?
     headers Json?
     params Json?
     body String?

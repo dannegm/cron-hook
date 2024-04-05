@@ -8,6 +8,7 @@ import {
     updateCronById,
     deleteCronById,
     executeById,
+    setActiveCronById,
 } from './controller.js';
 
 const router = Router();
@@ -71,6 +72,17 @@ router.delete('/crons/:cronId', async (req, res) => {
     await deleteCronById(cronId);
 
     return res.status(204);
+});
+
+router.post('/crons/:cronId/active', async (req, res) => {
+    const cronId = req.params.cronId;
+    const active = req.body?.active || false;
+
+    const result = await setActiveCronById(cronId, active);
+
+    return res.status(200).json({
+        data: result,
+    });
 });
 
 router.get('/crons/:cronId/trigger', async (req, res) => {
