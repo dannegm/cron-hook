@@ -71,7 +71,7 @@ router.delete('/crons/:cronId', async (req, res) => {
 
     await deleteCronById(cronId);
 
-    return res.status(204);
+    return res.status(204).end();
 });
 
 router.post('/crons/:cronId/active', async (req, res) => {

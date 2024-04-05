@@ -46,18 +46,17 @@ export const updateCronById = async (cronId, data) => {
 };
 
 export const deleteCronById = async cronId => {
-    const deleteLogs = LogSchema.deleteMany({
-        where: {
-            cronId,
-        },
-    });
-    const deleteCron = CronSchema.delete({
-        where: {
-            id: cronId,
-        },
-    });
-
     try {
+        const deleteLogs = LogSchema.deleteMany({
+            where: {
+                cronId,
+            },
+        });
+        const deleteCron = CronSchema.delete({
+            where: {
+                id: cronId,
+            },
+        });
         await prisma.$transaction([deleteLogs, deleteCron]);
     } catch (error) {
         console.error('Error deleting cron and associated logs:', error);

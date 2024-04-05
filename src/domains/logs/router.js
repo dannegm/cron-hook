@@ -88,7 +88,7 @@ router.delete('/logs/:logId', async (req, res) => {
 
     await deleteLogById(logId);
 
-    return res.status(204);
+    return res.status(204).end();
 });
 
 export default router;
