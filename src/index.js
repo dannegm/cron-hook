@@ -3,7 +3,7 @@ import { startServer } from './services/http.js';
 
 
 const start = () => {
-    // startJob();
+    startJob();
     startServer();
 };
 
