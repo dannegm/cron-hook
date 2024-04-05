@@ -21,6 +21,7 @@ router.get('/crons/:cronId/logs', async (req, res) => {
     });
 });
 
+// Delete all the logs
 router.get('/crons/:cronId/logs/flush', async (req, res) => {
     const cronId = req.params.cronId;
     const cron = await getCronById(cronId);
@@ -40,6 +41,7 @@ router.get('/crons/:cronId/logs/flush', async (req, res) => {
     });
 });
 
+// Delete all the logs, keep last 10
 router.get('/crons/:cronId/logs/prune', async (req, res) => {
     const cronId = req.params.cronId;
     const cron = await getCronById(cronId);

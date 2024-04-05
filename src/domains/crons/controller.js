@@ -6,7 +6,9 @@ import { buildUrl, getContent, getNextRun } from '@/helpers/utils';
 import { createLog, pruneLogs } from '../logs/controller';
 
 export const listCrons = async () => {
-    const list = await CronSchema.findMany();
+    const list = await CronSchema.findMany({
+        orderBy: { createdAt: 'desc' },
+    });
     return list;
 };
 
