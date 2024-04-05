@@ -57,9 +57,14 @@ export const deleteCronById = async cronId => {
         },
     });
 
-    const transaction = await prisma.$transaction([deleteLogs, deleteCron]);
-
-    return transaction;
+    try {
+        await prisma.$transaction([deleteLogs, deleteCron]);
+    } catch (error) {
+        console.error('Error deleting cron and associated logs:', error);
+    } finally {
+        await prisma.$disconnect();
+        return true;
+    }
 };
 
 export const setActiveCronById = async (cronId, active) => {
