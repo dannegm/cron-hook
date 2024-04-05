@@ -56,14 +56,15 @@ export const deleteCronById = async cronId => {
 };
 
 export const setActiveCronById = async (cronId, active) => {
-    const found = getCronById(cronId);
-
+    const found = await getCronById(cronId);
     const nextRun = getNextRun(found);
 
-    return await updateCronById(cronId, {
+    const updated = await updateCronById(cronId, {
         active,
         nextRun,
     });
+
+    return updated;
 };
 
 export const getCronsByNextRun = async nextRun => {
