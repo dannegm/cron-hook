@@ -23,12 +23,31 @@ enum HttpMethods {
 }
 
 model Cron {
-    id   String @id @default(uuid())
-    logs Log[]
+    id                 String      @id @default(uuid())
+    pattern            String
+    patternDescription String
+    active             Boolean     @default(true)
+    hook               String
+    method             HttpMethods @default(GET)
+    authorization      String?
+    headers            Json?
+    params             Json?
+    body               String?
+    firstRun           DateTime    @default(now())
+    nextRun            DateTime?
+    lastRun            DateTime?
+    createdAt          DateTime    @default(now())
+    updatedAt          DateTime    @updatedAt
+    logs               Log[]
 }
 
 model Log {
-    id     String @id @default(uuid())
-    cronId String
-    cron   Cron   @relation(fields: [cronId], references: [id])
+    id          String   @id @default(uuid())
+    cronId      String
+    cron        Cron     @relation(fields: [cronId], references: [id])
+    executedAt  DateTime @default(now())
+    status      Int
+    response    String
+    contentType String
+    headers     Json
 }
