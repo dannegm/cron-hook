@@ -5,13 +5,13 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client-js"
+    provider      = "prisma-client-js"
     binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
     provider = "postgresql"
-    url = env("DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
 
 enum HttpMethods {
@@ -23,31 +23,12 @@ enum HttpMethods {
 }
 
 model Cron {
-    id String @id @default(uuid())
-    pattern String
-    patternDescription String
-    active Boolean @default(true)
-    hook String
-    method HttpMethods @default(GET)
-    authorization String?
-    headers Json?
-    params Json?
-    body String?
-    firstRun DateTime @default(now())
-    nextRun DateTime?
-    lastRun DateTime?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id   String @id @default(uuid())
     logs Log[]
 }
 
 model Log {
-    id String @id @default(uuid())
+    id     String @id @default(uuid())
     cronId String
-    cron Cron @relation(fields: [cronId], references: [id])
-    executedAt DateTime @default(now())
-    status Int
-    response String
-    contentType String
-    headers Json
+    cron   Cron   @relation(fields: [cronId], references: [id])
 }

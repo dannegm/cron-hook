@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setMilliseconds } from 'date-fns';
-import { CronSchema } from '@/services/db.js';
+import { prisma, CronSchema, LogSchema } from '@/services/db.js';
 import { buildUrl, getContent, getNextRun } from '@/helpers/utils';
 
 import { createLog, pruneLogs } from '../logs/controller';
@@ -46,13 +46,20 @@ export const updateCronById = async (cronId, data) => {
 };
 
 export const deleteCronById = async cronId => {
-    const found = await CronSchema.delete({
+    const deleteLogs = LogSchema.deleteMany({
+        where: {
+            cronId,
+        },
+    });
+    const deleteCron = CronSchema.delete({
         where: {
             id: cronId,
         },
     });
 
-    return found;
+    const transaction = await prisma.$transaction([deleteLogs, deleteCron]);
+
+    return transaction;
 };
 
 export const setActiveCronById = async (cronId, active) => {

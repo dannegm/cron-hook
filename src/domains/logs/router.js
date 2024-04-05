@@ -78,7 +78,7 @@ router.get('/logs/:logId', async (req, res) => {
 
 router.delete('/logs/:logId', async (req, res) => {
     const logId = req.params.logId;
-    const log = await getCronById(logId);
+    const log = await getLogById(logId);
 
     if (!log) {
         return res.status(404).json({
