@@ -73,7 +73,7 @@ export default function TestEmail({
                                         </Text>
                                         <Text className='text-sm my-0'>{content}</Text>
 
-                                        {action?.href !== '' && action?.label !== '' && (
+                                        {action?.href && action?.label && (
                                             <Button
                                                 className='mt-4 inline-block w-max font-semibold rounded-lg bg-gray-200 px-3 py-2 text-sm'
                                                 href={action?.href}
