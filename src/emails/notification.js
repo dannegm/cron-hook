@@ -34,6 +34,14 @@ export default function TestEmail({
         <Html>
             <Head>
                 <title>CronHook Notification</title>
+                <style>
+                    {`
+                        code p {
+                        margin-block-start: 0px;
+                        margin-block-end: 0px;
+                        }
+                    `}
+                </style>
             </Head>
 
             <Preview>{previewText}</Preview>
@@ -77,22 +85,12 @@ export default function TestEmail({
                                         <Text className='text-sm my-0'>{content}</Text>
 
                                         {code !== '' && (
-                                            <>
-                                                <style>
-                                                    {`
-                                                        code p {
-                                                        margin-block-start: 0px;
-                                                        margin-block-end: 0px;
-                                                        }
-                                                    `}
-                                                </style>
-                                                <CodeBlock
-                                                    code={code}
-                                                    theme={dracula}
-                                                    language='jsx'
-                                                    lineNumbers
-                                                />
-                                            </>
+                                            <CodeBlock
+                                                code={code}
+                                                theme={dracula}
+                                                language='text'
+                                                lineNumbers
+                                            />
                                         )}
 
                                         {action?.href && action?.label && (
