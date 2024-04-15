@@ -13,6 +13,8 @@ import {
     Button,
     Row,
     Column,
+    CodeBlock,
+    dracula,
 } from '@react-email/components';
 
 const CRON_HOOK_BASE_URL = 'https://cronhook.hckr.mx';
@@ -21,6 +23,7 @@ export default function TestEmail({
     // ...
     subject,
     content,
+    code,
     icon,
     action,
     user,
@@ -72,6 +75,25 @@ export default function TestEmail({
                                             {subject}
                                         </Text>
                                         <Text className='text-sm my-0'>{content}</Text>
+
+                                        {code !== '' && (
+                                            <>
+                                                <style>
+                                                    {`
+                                                        code p {
+                                                        margin-block-start: 0px;
+                                                        margin-block-end: 0px;
+                                                        }
+                                                    `}
+                                                </style>
+                                                <CodeBlock
+                                                    code={code}
+                                                    theme={dracula}
+                                                    language='jsx'
+                                                    lineNumbers
+                                                />
+                                            </>
+                                        )}
 
                                         {action?.href && action?.label && (
                                             <Button

@@ -33,10 +33,11 @@ router.post('/notification', async (req, res) => {
             user: extractUserData(req.body.to),
             subject: req.body.subject,
             content: req.body.content,
+            content: req.body?.code || '',
             icon: req.body.icon,
             action: {
-                href: req.body?.action?.href,
-                label: req.body?.action?.label,
+                href: req.body?.action?.href || '',
+                label: req.body?.action?.label || '',
             },
         }),
         headers: {
