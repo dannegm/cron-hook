@@ -5,13 +5,15 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider      = "prisma-client-js"
+    provider = "prisma-client-js"
     binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+    previewFeatures = ["multiSchema"]
 }
 
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
+    schemas  = ["cronhook"]
 }
 
 enum HttpMethods {
@@ -20,6 +22,8 @@ enum HttpMethods {
     UPDATE
     DELETE
     PATCH
+
+    @@schema("cronhook")
 }
 
 model Cron {
@@ -39,6 +43,8 @@ model Cron {
     createdAt          DateTime    @default(now())
     updatedAt          DateTime    @updatedAt
     logs               Log[]
+
+    @@schema("cronhook")
 }
 
 model Log {
@@ -50,4 +56,6 @@ model Log {
     response    String
     contentType String
     headers     Json
+
+    @@schema("cronhook")
 }
